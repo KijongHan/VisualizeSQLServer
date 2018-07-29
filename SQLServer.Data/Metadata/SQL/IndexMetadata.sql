@@ -1,0 +1,10 @@
+﻿SELECT 
+	sys.indexes.[object_id],
+	sys.indexes.[name],
+	sys.indexes.[index_id],
+	sys.indexes.[type],
+	sys.indexes.[type_desc],
+	sys.indexes.[is_unique],
+	sys.indexes.[is_primary_key]
+FROM 
+	sys.indexes

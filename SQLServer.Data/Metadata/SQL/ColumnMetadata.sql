@@ -1,0 +1,12 @@
+﻿SELECT
+	sys.columns.[object_id],
+	sys.columns.[name],
+	sys.columns.[column_id],
+	sys.columns.[system_type_id],
+	sys.columns.[max_length],
+	sys.columns.[precision],
+	sys.columns.[scale],
+	sys.columns.[is_nullable],
+	sys.columns.[is_identity]
+FROM 
+	sys.columns

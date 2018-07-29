@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Metadata\SQL\ColumnMetadata.sql" />
+    <None Remove="Metadata\SQL\ForeignKeyColumnMetadata.sql" />
+    <None Remove="Metadata\SQL\ForeignKeyMetadata.sql" />
+    <None Remove="Metadata\SQL\IndexColumnMetadata.sql" />
+    <None Remove="Metadata\SQL\IndexMetadata.sql" />
+    <None Remove="Metadata\SQL\KeyMetadata.sql" />
+    <None Remove="Metadata\SQL\TableMetadata.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Metadata\SQL\ColumnMetadata.sql" />
+    <EmbeddedResource Include="Metadata\SQL\ForeignKeyColumnMetadata.sql" />
+    <EmbeddedResource Include="Metadata\SQL\ForeignKeyMetadata.sql" />
+    <EmbeddedResource Include="Metadata\SQL\IndexColumnMetadata.sql" />
+    <EmbeddedResource Include="Metadata\SQL\IndexMetadata.sql" />
+    <EmbeddedResource Include="Metadata\SQL\KeyMetadata.sql" />
+    <EmbeddedResource Include="Metadata\SQL\TableMetadata.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+  </ItemGroup>
+
+</Project>

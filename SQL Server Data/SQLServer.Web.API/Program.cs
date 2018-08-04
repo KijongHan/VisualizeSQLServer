@@ -17,9 +17,27 @@ namespace SQLServer.Web.API
 			BuildWebHost(args).Run();
 		}
 
-		public static IWebHost BuildWebHost(string[] args) =>
-			WebHost.CreateDefaultBuilder(args)
+		public static IWebHost BuildWebHost(string[] args)
+		{
+			if(args!=null && args.Length==2)
+			{
+				var baseAddress = args[0];
+				var port = args[1];
+				var url = $"{baseAddress}:{port}";
+
+				var host = new WebHostBuilder()
+					.UseKestrel()
+					.UseContentRoot(Directory.GetCurrentDirectory())
+					.UseIISIntegration()
+					.UseStartup<Startup>()
+					.UseUrls(url)
+					.Build();
+				return host;
+			}
+
+			return WebHost.CreateDefaultBuilder()
 				.UseStartup<Startup>()
 				.Build();
+		}
 	}
 }

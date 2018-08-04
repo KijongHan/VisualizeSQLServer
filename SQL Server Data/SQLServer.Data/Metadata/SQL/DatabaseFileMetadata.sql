@@ -1,0 +1,15 @@
+﻿SELECT
+	sys.database_files.[file_id],
+	sys.database_files.[type],
+	sys.database_files.[type_desc],
+	sys.database_files.[data_space_id],
+	sys.database_files.[name],
+	sys.database_files.[physical_name],
+	sys.database_files.[state],
+	sys.database_files.[state_desc],
+	sys.database_files.[size],
+	sys.database_files.[max_size],
+	sys.database_files.[growth],
+	sys.database_files.[file_id]
+FROM 
+	sys.database_files

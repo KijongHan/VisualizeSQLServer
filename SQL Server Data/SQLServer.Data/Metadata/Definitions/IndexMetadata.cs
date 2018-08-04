@@ -17,6 +17,9 @@ namespace SQLServer.Data.Metadata.Definitions
 		[Column("index_id")]
 		public int IndexID { get; set; }
 
+		[Column("data_space_id")]
+		public int DataSpaceID { get; set; }
+
 		[Column("type")]
 		public byte IndexType { get; set; }
 

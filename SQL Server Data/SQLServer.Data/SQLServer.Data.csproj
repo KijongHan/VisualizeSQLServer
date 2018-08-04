@@ -34,4 +34,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SQLServer.Data.Entities\SQLServer.Data.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

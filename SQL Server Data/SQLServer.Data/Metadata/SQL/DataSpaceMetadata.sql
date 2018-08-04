@@ -1,0 +1,9 @@
+﻿SELECT
+	sys.data_spaces.[name],
+	sys.data_spaces.[data_space_id],
+	sys.data_spaces.[type],
+	sys.data_spaces.[type_desc],
+	sys.data_spaces.[is_default],
+	sys.data_spaces.[is_system]
+FROM 
+	sys.data_spaces

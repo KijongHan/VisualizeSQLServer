@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Entities\SQL\ColumnMetadata.sql" />
+    <None Remove="Entities\SQL\DatabaseFileMetadata.sql" />
+    <None Remove="Entities\SQL\DataSpaceMetadata.sql" />
+    <None Remove="Entities\SQL\ForeignKeyColumnMetadata.sql" />
+    <None Remove="Entities\SQL\ForeignKeyMetadata.sql" />
+    <None Remove="Entities\SQL\IndexColumnMetadata.sql" />
+    <None Remove="Entities\SQL\IndexMetadata.sql" />
+    <None Remove="Entities\SQL\KeyMetadata.sql" />
+    <None Remove="Entities\SQL\TableMetadata.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Entities\SQL\ColumnMetadata.sql" />
+    <EmbeddedResource Include="Entities\SQL\DatabaseFileMetadata.sql" />
+    <EmbeddedResource Include="Entities\SQL\DataSpaceMetadata.sql" />
+    <EmbeddedResource Include="Entities\SQL\ForeignKeyColumnMetadata.sql" />
+    <EmbeddedResource Include="Entities\SQL\ForeignKeyMetadata.sql" />
+    <EmbeddedResource Include="Entities\SQL\IndexColumnMetadata.sql" />
+    <EmbeddedResource Include="Entities\SQL\IndexMetadata.sql" />
+    <EmbeddedResource Include="Entities\SQL\KeyMetadata.sql" />
+    <EmbeddedResource Include="Entities\SQL\TableMetadata.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SQLServer.Data.Entities\SQLServer.Data.Entities.csproj" />
+  </ItemGroup>
+
+</Project>

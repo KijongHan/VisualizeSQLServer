@@ -29,6 +29,25 @@ namespace SQLServer.Data.Metadata
 		protected DbQuery<IndexColumnMetadata> IndexColumnMetadata { get; set; }
 		protected DbQuery<ForeignKeyMetadata> ForeignKeyMetadata { get; set; }
 		protected DbQuery<ForeignKeyColumnMetadata> ForeignKeyColumnMetadata { get; set; }
+		
+		protected DbQuery<DatabaseFileMetdata> DatabaseFileMetdata { get; set; }
+		protected DbQuery<DataSpaceMetadata> DataSpaceMetadata { get; set; }
+
+		public IQueryable<DataSpaceMetadata> GetDataSpaceMetadata()
+		{
+			var sqlDefinition = getSQLDefinition(typeof(DataSpaceMetadata).GetCustomAttribute<SQLServerMetadataAttribute>().SQLDefinitionResource);
+			return DataSpaceMetadata
+				.FromSql(sqlDefinition)
+				.AsQueryable();
+		}
+
+		public IQueryable<DatabaseFileMetdata> GetDatabaseFileMetdata()
+		{
+			var sqlDefinition = getSQLDefinition(typeof(DatabaseFileMetdata).GetCustomAttribute<SQLServerMetadataAttribute>().SQLDefinitionResource);
+			return DatabaseFileMetdata
+				.FromSql(sqlDefinition)
+				.AsQueryable();
+		}
 
 		public IQueryable<TableMetadata> GetTableMetadata()
 		{

@@ -9,7 +9,6 @@
 	sys.database_files.[state_desc],
 	sys.database_files.[size],
 	sys.database_files.[max_size],
-	sys.database_files.[growth],
-	sys.database_files.[file_id]
+	sys.database_files.[growth]
 FROM 
 	sys.database_files

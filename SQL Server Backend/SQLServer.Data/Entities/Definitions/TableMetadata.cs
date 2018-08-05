@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SQLServer.Data.Metadata
 {
-	[SQLServerMetadata("SQLServer.Data.Metadata.SQL.TableMetadata.sql")]
+	[SQLServerMetadata("SQLServer.Data.Metadata.Entities.SQL.TableMetadata.sql")]
 	public class TableMetadata
 	{
 		[Column("object_id")]

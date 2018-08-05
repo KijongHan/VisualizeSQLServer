@@ -10,11 +10,11 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SQLServer.Data.Manager
+namespace SQLServer.Data.Metadata.Manager
 {
-	public class SQLServerMetadataManager
+	public static class DbObjectMetadataManagerExtensions
 	{
-		public List<Table> RetrieveTableEntities(string dbConnString)
+		public static List<Table> RetrieveTableEntities(this MetadataManager metadataManager, string dbConnString)
 		{
 			var tables = new List<Table>();
 			using (var dbContext = new MetadataDbContext(dbConnString))

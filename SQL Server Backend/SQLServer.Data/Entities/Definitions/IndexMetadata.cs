@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SQLServer.Data.Metadata.Definitions
 {
-	[SQLServerMetadata("SQLServer.Data.Metadata.SQL.IndexMetadata.sql")]
+	[SQLServerMetadata("SQLServer.Data.Metadata.Entities.SQL.IndexMetadata.sql")]
 	public class IndexMetadata
 	{
 		[Column("object_id")]

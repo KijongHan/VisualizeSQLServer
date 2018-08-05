@@ -142,5 +142,31 @@ namespace SQLServer.Data.Extensions
 			}
 			throw new Exception($"Not recognized key type {keyType}");
 		}
+
+		public static DataSpace.Type GetDataSpaceType(this string dataSpaceType)
+		{
+			if(dataSpaceType == "FG")
+			{
+				return DataSpace.Type.FileGroup;
+			}
+			if (dataSpaceType == "PS")
+			{
+				return DataSpace.Type.PartitionScheme;
+			}
+			throw new Exception($"Not recognized data space type {dataSpaceType}");
+		}
+
+		public static DatabaseFile.Type GetDatabaseFileType(this byte databaseFileType)
+		{
+			if(databaseFileType == 0)
+			{
+				return DatabaseFile.Type.Data;
+			}
+			if(databaseFileType == 1)
+			{
+				return DatabaseFile.Type.Log;
+			}
+			throw new Exception($"Not recognized database file type {databaseFileType}");
+		}
 	}
 }

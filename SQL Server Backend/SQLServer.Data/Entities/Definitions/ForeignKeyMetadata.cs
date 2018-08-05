@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SQLServer.Data.Metadata.Definitions
 {
-	[SQLServerMetadata("SQLServer.Data.Metadata.SQL.ForeignKeyMetadata.sql")]
+	[SQLServerMetadata("SQLServer.Data.Metadata.Entities.SQL.ForeignKeyMetadata.sql")]
 	public class ForeignKeyMetadata
 	{
 		[Column("name")]

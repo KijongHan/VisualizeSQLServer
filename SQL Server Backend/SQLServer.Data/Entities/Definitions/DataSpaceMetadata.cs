@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SQLServer.Data.Metadata.Definitions
 {
-	[SQLServerMetadata("SQLServer.Data.Metadata.SQL.DataSpaceMetadata.sql")]
+	[SQLServerMetadata("SQLServer.Data.Metadata.Entities.SQL.DataSpaceMetadata.sql")]
 	public class DataSpaceMetadata
 	{
 		[Column("name")]

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SQLServer.Data\SQLServer.Data.csproj" />
+    <ProjectReference Include="..\SQLServer.Data\SQLServer.Data.Metadata.csproj" />
   </ItemGroup>
 
 </Project>

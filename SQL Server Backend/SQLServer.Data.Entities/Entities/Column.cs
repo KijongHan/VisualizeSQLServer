@@ -27,5 +27,16 @@ namespace SQLServer.Data.Entities
 		public int Precision { get; set; }
 
 		public int Scale { get; set; }
+
+		public override bool Equals(object obj)
+		{
+			if(obj.GetType()!=GetType())
+			{
+				return false;
+			}
+
+			var other = (Column)obj;
+			return other.ColumnID == ColumnID && other.TableObjectID == TableObjectID;
+		}
 	}
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLServer.Data.Metadata", "SQLServer.Data\SQLServer.Data.Metadata.csproj", "{08201E84-68AD-4744-8F47-EE7731D465F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLServer.Data.Metadata", "SQLServer.Data.Metadata\SQLServer.Data.Metadata.csproj", "{08201E84-68AD-4744-8F47-EE7731D465F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLServer.Console", "SQLServer.Console\SQLServer.Console.csproj", "{F99ADBB6-7678-4C84-B0D3-0878E775539C}"
 EndProject

@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SQLServer.Data\SQLServer.Data.Metadata.csproj" />
+    <ProjectReference Include="..\SQLServer.Data.Metadata\SQLServer.Data.Metadata.csproj" />
   </ItemGroup>
 
 </Project>

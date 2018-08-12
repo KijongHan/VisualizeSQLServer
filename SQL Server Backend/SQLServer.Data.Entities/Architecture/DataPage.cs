@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SQLServer.Data.Entities.Architecture
 {
-	public abstract class IndexArchitecture
+	public class DataPage : DatabasePage
 	{
 
 	}

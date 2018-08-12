@@ -10,9 +10,11 @@ namespace SQLServer.Data.Test
 		[TestMethod]
 		public void TestMethod1()
 		{
+			var connstring = "Server=DESKTOP-DIU834E\\SQLEXPRESS;Database=TaccomStrike;Trusted_Connection=true;";
 			var sqlServerMetadataManager = new MetadataManager();
-			var tables = sqlServerMetadataManager.RetrieveTableEntities("Server=DESKTOP-DIU834E\\SQLEXPRESS;Database=TaccomStrike;User Id=Thomas_Han;Password=159789Qaz");
-			var dataspaces = sqlServerMetadataManager.RetrieveDataSpaceEntities("Server=DESKTOP-DIU834E\\SQLEXPRESS;Database=TaccomStrike;User Id=Thomas_Han;Password=159789Qaz");
+			var tables = sqlServerMetadataManager.RetrieveTableEntities(connstring);
+			var dataspaces = sqlServerMetadataManager.RetrieveDataSpaceEntities(connstring);
+			sqlServerMetadataManager.RetrieveEntities(connstring);
 		}
 	}
 }

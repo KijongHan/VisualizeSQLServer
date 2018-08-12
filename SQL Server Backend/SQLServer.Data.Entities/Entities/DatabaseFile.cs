@@ -4,8 +4,10 @@ using System.Text;
 
 namespace SQLServer.Data.Entities
 {
-	public class DatabaseFile
+	public abstract class DatabaseFile
 	{
+		public abstract DatabaseFile.Type DatabaseFileType { get; }
+
 		public enum Type
 		{
 			Data, Log

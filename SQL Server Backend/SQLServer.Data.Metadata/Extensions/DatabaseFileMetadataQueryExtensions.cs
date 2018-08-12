@@ -34,18 +34,6 @@ namespace SQLServer.Data.Metadata.Extensions
 			return databaseFileMetadata;
 		}
 
-		public static IQueryable<DatabaseFile> AsEntities(this IQueryable<DatabaseFileMetdata> databaseFileMetadata)
-		{
-			var entities = databaseFileMetadata
-				.Select((item) =>
-					new DatabaseFile
-					{
-
-					}
-				);
-			return entities;
-		}
-
 		public static IQueryable<DataFile> AsDataFiles(this IQueryable<DatabaseFileMetdata> databaseFileMetadata)
 		{
 			var entities = databaseFileMetadata
@@ -53,7 +41,10 @@ namespace SQLServer.Data.Metadata.Extensions
 				.Select((item) =>
 					new DataFile
 					{
-
+						FileID = item.FileID,
+						DataSpaceID = item.DataSpaceID,
+						LogicalName = item.LogicalName,
+						PhysicalName = item.PhysicalName
 					}
 				);
 			return entities;

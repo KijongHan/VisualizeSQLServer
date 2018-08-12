@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SQLServer.Data.Metadata.Definitions;
+using SQLServer.Data.Metadata.Entities.Definitions;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -32,6 +34,89 @@ namespace SQLServer.Data.Metadata
 		
 		protected DbQuery<DatabaseFileMetdata> DatabaseFileMetdata { get; set; }
 		protected DbQuery<DataSpaceMetadata> DataSpaceMetadata { get; set; }
+
+		protected DbQuery<DataPagesMetadata> DataPagesMetadata { get; set; }
+
+		public List<DataPageRawMetadata> GetDataPageRawMetadata(string database, short fileID, int pageID, string dbConnectionString)
+		{
+			var data = new List<DataPageRawMetadata>();
+			using (var connection = new SqlConnection(dbConnectionString))
+			{
+				connection.Open();
+				var sqlCommand = new SqlCommand($"DBCC PAGE('{database}',{fileID},{pageID},3) WITH TABLERESULTS", connection);
+				using (var reader = sqlCommand.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						var raw = new DataPageRawMetadata
+						{
+							ParentObjectName = reader.GetString(0),
+							Object = reader.GetString(1),
+							Field = reader.GetString(2),
+							Value = reader.GetString(3)
+						};
+						data.Add(raw);
+					}
+				}
+			}
+			return data;
+		}
+
+		public List<DataPageFormattedMetadata> GetDataPageFormattedMetadata(string database, short fileID, int pageID, string dbConnectionString)
+		{
+			var data = new List<DataPageFormattedMetadata>();
+			using (var connection = new SqlConnection(dbConnectionString))
+			{
+				connection.Open();
+				var sqlCommand = new SqlCommand($"DBCC PAGE('{database}',{fileID},{pageID},3) WITH TABLERESULTS", connection);
+				using (var reader = sqlCommand.ExecuteReader())
+				{
+					if (reader.NextResult())
+					{
+						while (reader.Read())
+						{
+							string keyHashValue = null;
+							try
+							{
+								keyHashValue = (string)reader.GetValue(7);
+							}
+							catch (Exception e) { }
+
+							string key = null;
+							try
+							{
+								key = (string)reader.GetValue(6);
+							}
+							catch (Exception e) { }
+
+							var formatted = new DataPageFormattedMetadata
+							{
+								FileID = (short)reader.GetValue(0),
+								PageID = (int)reader.GetValue(1),
+								Row = (short)reader.GetValue(2),
+								Level = (short)reader.GetValue(3),
+								ChildFileID = (short)reader.GetValue(4),
+								ChildPageID = (int)reader.GetValue(5),
+								Key = key,
+								KeyHashValue = keyHashValue,
+								RowSize = (short)reader.GetValue(8)
+							};
+							data.Add(formatted);
+						}
+					}
+				}
+			}
+
+			return data;
+		}
+
+		public List<DataPagesMetadata> GetDataPagesMetadata(string database, string table, string schema)
+		{
+			var sqlDefinition = $"DBCC IND('{database}','{schema}.{table}',-1)";
+			return DataPagesMetadata
+				.FromSql(sqlDefinition)
+				.ToList();
+		}
 
 		public IQueryable<DataSpaceMetadata> GetDataSpaceMetadata()
 		{

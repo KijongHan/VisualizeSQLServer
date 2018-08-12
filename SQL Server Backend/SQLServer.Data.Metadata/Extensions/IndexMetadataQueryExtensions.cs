@@ -26,6 +26,15 @@ namespace SQLServer.Data.Metadata.Extensions
 			return indexMetadataQuery;
 		}
 
+		public static IQueryable<IndexMetadata> GetIndexMetadata(this IQueryable<IndexMetadata> indexMetadataQuery, int tableObjectID, int indexID)
+		{
+			indexMetadataQuery = indexMetadataQuery
+				.GetIndexMetadataInTable(tableObjectID)
+				.Where((item) => item.IndexID == indexID);
+
+			return indexMetadataQuery;
+		}
+
 		public static IQueryable<IndexMetadata> GetIndexMetadataInDataSpace(this IQueryable<IndexMetadata> indexMetadataQuery, int dataSpaceID)
 		{
 			indexMetadataQuery = indexMetadataQuery

@@ -7,9 +7,12 @@ namespace SQLServer.Data.Metadata.Extensions
 {
 	public static class TableMetadataQueryExtensions
 	{
-		public static List<int> GetTableMetadataTableObjectIDs(this IQueryable<TableMetadata> tableMetadataQuery)
+		public static IQueryable<TableMetadata> GetTableMetadata(this IQueryable<TableMetadata> tableMetadataQuery, string tableName, string tableSchema)
 		{
-			return tableMetadataQuery.Select((item) => item.TableObjectID).ToList();
+			tableMetadataQuery = tableMetadataQuery
+				.Where((item) => item.TableName == tableName && item.SchemaName == tableSchema);
+
+			return tableMetadataQuery;
 		}
 	}
 }

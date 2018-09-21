@@ -3,6 +3,7 @@ using SQLServer.Data.Metadata.Definitions;
 using SQLServer.Data.Metadata.Entities.Definitions;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -14,16 +15,17 @@ namespace SQLServer.Data.Metadata
 {
 	public class MetadataDbContext : DbContext
 	{
+		private string ConnectionString;
+
 		public MetadataDbContext(string connString) : base(
 			new DbContextOptionsBuilder()
 			.UseSqlServer(connString)
 			.Options
 			)
-		{}
-
-		public MetadataDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
-		{}
-
+		{
+			ConnectionString = connString;
+		}
+		
 		protected DbQuery<TableMetadata> TableMetadata { get; set; }
 		protected DbQuery<ColumnMetadata> ColumnMetadata { get; set; }
 		protected DbQuery<KeyMetadata> KeyMetadata { get; set; }
@@ -34,26 +36,55 @@ namespace SQLServer.Data.Metadata
 		
 		protected DbQuery<DatabaseFileMetdata> DatabaseFileMetdata { get; set; }
 		protected DbQuery<DataSpaceMetadata> DataSpaceMetadata { get; set; }
-
 		protected DbQuery<DataPagesMetadata> DataPagesMetadata { get; set; }
 
-		public List<DataPageRawMetadata> GetDataPageRawMetadata(string database, short fileID, int pageID, string dbConnectionString)
+		public List<DataPageMetadata> GetDataPageMetadata(short fileID, int pageID)
 		{
-			var data = new List<DataPageRawMetadata>();
-			using (var connection = new SqlConnection(dbConnectionString))
+			var data = new List<DataPageMetadata>();
+			using (var connection = new SqlConnection(ConnectionString))
 			{
 				connection.Open();
-				var sqlCommand = new SqlCommand($"DBCC PAGE('{database}',{fileID},{pageID},3) WITH TABLERESULTS", connection);
+				var sqlCommand = new SqlCommand($"DBCC PAGE(@database, @fileID, @pageID,3) WITH TABLERESULTS", connection);
+				sqlCommand.Parameters.AddWithValue("@database", connection.Database);
+				sqlCommand.Parameters.AddWithValue("@fileID", fileID);
+				sqlCommand.Parameters.AddWithValue("@pageID", pageID);
+
 				using (var reader = sqlCommand.ExecuteReader())
 				{
 					while (reader.Read())
 					{
-						var raw = new DataPageRawMetadata
+						string parentObjectName = null;
+						string objectColumn = null;
+						string field = null;
+						string value = null;
+
+						try
 						{
-							ParentObjectName = reader.GetString(0),
-							Object = reader.GetString(1),
-							Field = reader.GetString(2),
-							Value = reader.GetString(3)
+							parentObjectName = reader.GetString(0);
+						}
+						catch (InvalidCastException e) { }
+						try
+						{
+							objectColumn = reader.GetString(1);
+						}
+						catch (InvalidCastException e) { }
+						try
+						{
+							field = reader.GetString(2);
+						}
+						catch (InvalidCastException e) { }
+						try
+						{
+							value = reader.GetString(3);
+						}
+						catch (InvalidCastException e) { }
+
+						var raw = new DataPageMetadata
+						{
+							ParentObjectName = parentObjectName,
+							Object = objectColumn,
+							Field = field,
+							Value = value
 						};
 						data.Add(raw);
 					}
@@ -62,60 +93,138 @@ namespace SQLServer.Data.Metadata
 			return data;
 		}
 
-		public List<DataPageFormattedMetadata> GetDataPageFormattedMetadata(string database, short fileID, int pageID, string dbConnectionString)
+		public List<IndexPageIntermediateMetadata> GetIndexPageIntermediateMetadata(short fileID, int pageID)
 		{
-			var data = new List<DataPageFormattedMetadata>();
-			using (var connection = new SqlConnection(dbConnectionString))
+			var data = new List<IndexPageIntermediateMetadata>();
+			using (var connection = new SqlConnection(ConnectionString))
 			{
 				connection.Open();
-				var sqlCommand = new SqlCommand($"DBCC PAGE('{database}',{fileID},{pageID},3) WITH TABLERESULTS", connection);
+				var sqlCommand = new SqlCommand($"DBCC PAGE(@database, @fileID, @pageID,3) WITH TABLERESULTS", connection);
+				sqlCommand.Parameters.AddWithValue("@database", connection.Database);
+				sqlCommand.Parameters.AddWithValue("@fileID", fileID);
+				sqlCommand.Parameters.AddWithValue("@pageID", pageID);
+
 				using (var reader = sqlCommand.ExecuteReader())
 				{
-					if (reader.NextResult())
+					if(!reader.NextResult())
 					{
-						while (reader.Read())
-						{
-							string keyHashValue = null;
-							try
-							{
-								keyHashValue = (string)reader.GetValue(7);
-							}
-							catch (Exception e) { }
-
-							string key = null;
-							try
-							{
-								key = (string)reader.GetValue(6);
-							}
-							catch (Exception e) { }
-
-							var formatted = new DataPageFormattedMetadata
-							{
-								FileID = (short)reader.GetValue(0),
-								PageID = (int)reader.GetValue(1),
-								Row = (short)reader.GetValue(2),
-								Level = (short)reader.GetValue(3),
-								ChildFileID = (short)reader.GetValue(4),
-								ChildPageID = (int)reader.GetValue(5),
-								Key = key,
-								KeyHashValue = keyHashValue,
-								RowSize = (short)reader.GetValue(8)
-							};
-							data.Add(formatted);
-						}
+						return null;
 					}
+
+					while (reader.Read())
+					{
+						string keyHashValue = null;
+						string key = null;
+						try
+						{
+							keyHashValue = (string)reader.GetValue(7);
+						}
+						catch(InvalidCastException e) { }
+						try
+						{
+							key = (string)reader.GetValue(6);
+						}
+						catch (InvalidCastException e) { }
+
+
+						var formatted = new IndexPageIntermediateMetadata
+						{
+							FileID = (short)reader.GetValue(0),
+							PageID = (int)reader.GetValue(1),
+							Row = (short)reader.GetValue(2),
+							Level = (short)reader.GetValue(3),
+							ChildFileID = (short)reader.GetValue(4),
+							ChildPageID = (int)reader.GetValue(5),
+							Key = key,
+							KeyHashValue = keyHashValue,
+							RowSize = (short)reader.GetValue(8)
+						};
+						data.Add(formatted);
+					}
+					
 				}
 			}
-
 			return data;
 		}
 
-		public List<DataPagesMetadata> GetDataPagesMetadata(string database, string table, string schema)
+		public List<IndexPageLeafMetadata> GetIndexPageLeafMetadata(short fileID, int pageID)
 		{
-			var sqlDefinition = $"DBCC IND('{database}','{schema}.{table}',-1)";
-			return DataPagesMetadata
-				.FromSql(sqlDefinition)
-				.ToList();
+			var data = new List<IndexPageLeafMetadata>();
+			using (var connection = new SqlConnection(ConnectionString))
+			{
+				connection.Open();
+				var sqlCommand = new SqlCommand($"DBCC PAGE(@database, @fileID, @pageID,3) WITH TABLERESULTS", connection);
+				sqlCommand.Parameters.AddWithValue("@database", connection.Database);
+				sqlCommand.Parameters.AddWithValue("@fileID", fileID);
+				sqlCommand.Parameters.AddWithValue("@pageID", pageID);
+
+				using (var reader = sqlCommand.ExecuteReader())
+				{
+					if (!reader.NextResult())
+					{
+						return null;
+					}
+
+					List<Tuple<string, int>> nameOrdinalPairs = null;
+					while (reader.Read())
+					{
+						if (nameOrdinalPairs == null)
+						{
+							nameOrdinalPairs = new List<Tuple<string, int>>();
+
+							int ordinal = 0;
+							while(ordinal < reader.FieldCount)
+							{
+								var name = reader.GetName(ordinal);
+								if(name.Contains("(key)"))
+								{
+									nameOrdinalPairs.Add(new Tuple<string, int>(name, ordinal));
+								}
+							}
+						}
+						var formatted = new IndexPageLeafMetadata
+						{
+							FileID = (short)reader.GetValue(0),
+							PageID = (int)reader.GetValue(1),
+							Row = (short)reader.GetValue(2),
+							Level = (short)reader.GetValue(3)
+						};
+
+						formatted.KeyColumns = nameOrdinalPairs
+							.Select((pair) =>
+							{
+								var key = pair.Item1;
+								string value = null;
+
+								try
+								{
+									value = (string)reader.GetValue(pair.Item2);
+								}
+								catch (InvalidCastException e) { }
+								
+								return new Tuple<string, string>(key, value);
+							})
+							.ToList();
+						data.Add(formatted);
+					}
+				}
+			}
+			return data;
+		}
+
+		public List<DataPagesMetadata> GetDataPagesMetadata(string table, string schema)
+		{
+			using (var connection = new SqlConnection(ConnectionString))
+			{
+				connection.Open();
+				var schemaTable = $"{schema}.{table}";
+				var database = connection.Database;
+
+				var sqlDefinition = "DBCC IND({0},{1},-1)";
+				return DataPagesMetadata
+					.FromSql(sqlDefinition, database, schemaTable)
+					.ToList();
+			}
 		}
 
 		public IQueryable<DataSpaceMetadata> GetDataSpaceMetadata()

@@ -48,6 +48,7 @@ namespace SQLServer.Data.Metadata.Extensions
 			return indexMetadataQuery
 				.Select((item) => new Index
 				{
+					TableName = item.TableName,
 					TableObjectID = item.TableObjectID,
 					IndexID = item.IndexID,
 					IndexName = item.IndexName,

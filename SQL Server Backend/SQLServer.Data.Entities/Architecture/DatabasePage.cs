@@ -6,16 +6,25 @@ namespace SQLServer.Data.Entities.Architecture
 {
 	public abstract class DatabasePage
 	{
-		public DatabasePage Next { get; set; }
+		public abstract DatabasePage.Type DatabasePageType { get; }
 
-		public DatabasePage Prev { get; set; }
+		public int? NextPageID { get; set; }
+		public DatabasePage NextPage { get; set; }
+
+		public int? PrevPageID { get; set; }
+		public DatabasePage PrevPage { get; set; }
 
 		public int PageID { get; set; }
+
+		public short FileID { get; set; }
 
 		public int IndexID { get; set; }
 
 		public int TableObjectID { get; set; }
 
-		public int DatabaseFileID { get; set; }
+		public enum Type
+		{
+			Data, IAM, Index
+		}
 	}
 }

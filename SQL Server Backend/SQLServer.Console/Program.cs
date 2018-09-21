@@ -10,8 +10,8 @@ namespace SQLServer.Console
 		public static void Main(string[] args)
 		{
 			var sqlServerMetadataManager = new MetadataManager();
-			sqlServerMetadataManager.RetrieveTableEntities("Server=DESKTOP-DIU834E\\SQLEXPRESS;Database=TaccomStrike;User Id=Thomas_Han;Password=159789Qaz");
-			sqlServerMetadataManager.RetrieveDataSpaceEntities("Server=DESKTOP-DIU834E\\SQLEXPRESS;Database=TaccomStrike;User Id=Thomas_Han;Password=159789Qaz");
+			//sqlServerMetadataManager.RetrieveTableEntities("Server=DESKTOP-DIU834E\\SQLEXPRESS;Database=TaccomStrike;User Id=Thomas_Han;Password=159789Qaz");
+			//sqlServerMetadataManager.RetrieveDataSpaceEntities("Server=DESKTOP-DIU834E\\SQLEXPRESS;Database=TaccomStrike;User Id=Thomas_Han;Password=159789Qaz");
 		}
 	}
 }

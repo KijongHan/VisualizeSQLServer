@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Entities\MetadataDbContext.cs~RF56e5b65.TMP" />
     <None Remove="Entities\SQL\ColumnMetadata.sql" />
     <None Remove="Entities\SQL\DatabaseFileMetadata.sql" />
     <None Remove="Entities\SQL\DataSpaceMetadata.sql" />

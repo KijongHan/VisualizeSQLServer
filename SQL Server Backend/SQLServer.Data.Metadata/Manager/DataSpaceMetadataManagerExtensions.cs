@@ -10,59 +10,56 @@ namespace SQLServer.Data.Metadata.Manager
 {
 	public static class DataSpaceMetadataManagerExtensions
 	{
-		public static List<DataSpace> RetrieveDataSpaceEntities(this MetadataManager metadataManager, string dbConnString)
+		public static List<DataSpace> RetrieveDataSpaceEntities(this MetadataManager metadataManager, MetadataDbContext dbContext)
 		{
 			var dataSpaces = new List<DataSpace>();
-			using(var dbContext = new MetadataDbContext(dbConnString))
-			{
-				var dataSpacesMetadata = dbContext
+			var dataSpacesMetadata = dbContext
 					.GetDataSpaceMetadata()
 					.ToList();
-				var dataFilesMetadata = dbContext
-					.GetDatabaseFileMetdata()
-					.ToList();
+			var dataFilesMetadata = dbContext
+				.GetDatabaseFileMetdata()
+				.ToList();
 
-				var indexMetadata = dbContext
-					.GetIndexMetadata()
-					.GetIndexMetadataInTables(dbContext.GetTableMetadata())
-					.ToList();
-				var columnMetadata = dbContext
-					.GetColumnMetadata()
-					.AsQueryable()
-					.GetColumnsInIndexColumns(dbContext.GetIndexColumnMetadata())
-					.ToList();
-				var indexColumnMetadata = dbContext
-					.GetIndexColumnMetadata()
-					.ToList();
+			var indexMetadata = dbContext
+				.GetIndexMetadata()
+				.GetIndexMetadataInTables(dbContext.GetTableMetadata())
+				.ToList();
+			var columnMetadata = dbContext
+				.GetColumnMetadata()
+				.AsQueryable()
+				.GetColumnsInIndexColumns(dbContext.GetIndexColumnMetadata())
+				.ToList();
+			var indexColumnMetadata = dbContext
+				.GetIndexColumnMetadata()
+				.ToList();
 
-				foreach(var dataSpaceMetadata in dataSpacesMetadata)
+			dataSpacesMetadata.ForEach((dataSpaceMetadata) =>
+			{
+				DataSpace dataSpaceEntity = null;
+				if (dataSpaceMetadata.Type.GetDataSpaceType() == DataSpace.Type.FileGroup)
 				{
-					DataSpace dataSpaceEntity = null;
-					if(dataSpaceMetadata.Type.GetDataSpaceType() == DataSpace.Type.FileGroup)
+					dataSpaceEntity = new FileGroup
 					{
-						dataSpaceEntity = new FileGroup
-						{
-							Name = dataSpaceMetadata.Name,
-							DataSpaceID = dataSpaceMetadata.DataSpaceID
-						};
+						Name = dataSpaceMetadata.Name,
+						DataSpaceID = dataSpaceMetadata.DataSpaceID
+					};
 
-						var dataFiles = dataFilesMetadata
-							.AsQueryable()
-							.GetDatabaseFileMetadataInDataSpace(dataSpaceEntity.DataSpaceID);
-						dataSpaceEntity.DataFiles = dataFiles
-							.AsDataFiles()
-							.ToList();
+					var dataFiles = dataFilesMetadata
+						.AsQueryable()
+						.GetDatabaseFileMetadataInDataSpace(dataSpaceEntity.DataSpaceID);
+					dataSpaceEntity.DataFiles = dataFiles
+						.AsDataFiles()
+						.ToList();
 
-						var indexes = indexMetadata
-							.AsQueryable()
-							.GetIndexMetadataInDataSpace(dataSpaceEntity.DataSpaceID)
-							.AsIndexes()
-							.ToList();
-						dataSpaceEntity.Indexes = indexes;
-					}
-					dataSpaces.Add(dataSpaceEntity);
+					var indexes = indexMetadata
+						.AsQueryable()
+						.GetIndexMetadataInDataSpace(dataSpaceEntity.DataSpaceID)
+						.AsIndexes()
+						.ToList();
+					dataSpaceEntity.Indexes = indexes;
 				}
-			}
+				dataSpaces.Add(dataSpaceEntity);
+			});
 
 			return dataSpaces;
 		}

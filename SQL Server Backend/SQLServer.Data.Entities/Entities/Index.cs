@@ -6,6 +6,8 @@ namespace SQLServer.Data.Entities
 {
 	public class Index
 	{
+		public string TableName { get; set; }
+
 		public int TableObjectID { get; set; }
 
 		public int IndexID { get; set; }

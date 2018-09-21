@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SQLServer.Data.Metadata.Entities.Definitions
 {
-	public class DataPageFormattedMetadata
+	public class IndexPageMetadata
 	{
 		[Column("FileId")]
 		public short FileID { get; set; }
@@ -18,15 +18,6 @@ namespace SQLServer.Data.Metadata.Entities.Definitions
 
 		[Column("Level")]
 		public int Level { get; set; }
-
-		[Column("ChildFileId")]
-		public short ChildFileID { get; set; }
-
-		[Column("ChildPageId")]
-		public int ChildPageID { get; set; }
-
-		[Column("ID (key)")]
-		public string Key { get; set; }
 
 		[Column("KeyHashValue")]
 		public string KeyHashValue { get; set; }

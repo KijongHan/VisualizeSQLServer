@@ -6,7 +6,9 @@ namespace SQLServer.Data.Entities.Architecture
 {
 	public class NonClusteredIndexArchitecture : IndexArchitecture
 	{
-		public IAMPage RootNode { get; set; }
+		public IAMPage IAMPage { get; set; }
+
+		public IndexPage RootNode { get; set; }
 
 		public List<IndexPage> IntermediateNodes { get; set; }
 

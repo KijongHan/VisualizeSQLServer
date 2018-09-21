@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SQLServer.Data.Metadata.Entities.Definitions
 {
-	public class DataPageRawMetadata
+	public class DataPageMetadata
 	{
 		[Column("ParentObject")]
 		public string ParentObjectName { get; set; }

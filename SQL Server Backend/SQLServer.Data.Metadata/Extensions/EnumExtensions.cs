@@ -1,4 +1,5 @@
 ﻿using SQLServer.Data.Entities;
+using SQLServer.Data.Entities.Architecture;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -167,6 +168,23 @@ namespace SQLServer.Data.Extensions
 				return DatabaseFile.Type.Log;
 			}
 			throw new Exception($"Not recognized database file type {databaseFileType}");
+		}
+
+		public static DatabasePage.Type GetDatabasePageType(this short databasePageType)
+		{
+			if(databasePageType == 10)
+			{
+				return DatabasePage.Type.IAM;
+			}
+			if (databasePageType == 2)
+			{
+				return DatabasePage.Type.Index;
+			}
+			if (databasePageType == 1)
+			{
+				return DatabasePage.Type.Data;
+			}
+			throw new Exception($"Not recognized database page type {databasePageType}");
 		}
 	}
 }

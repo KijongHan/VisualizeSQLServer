@@ -6,10 +6,10 @@ namespace SQLServer.Data.Entities.Architecture
 {
 	public class ClusteredIndexArchitecture : IndexArchitecture
 	{
-		public IAMPage RootNode { get; set; }
+		public IAMPage IAMPage { get; set; }
 
-		public List<IndexPage> IntermediateNodes { get; set; }
+		public HashSet<IndexPage> IndexPages { get; set; }
 
-		public List<DataPage> LeafNodes { get; set; }
+		public HashSet<DataPage> DataPages { get; set; }
 	}
 }

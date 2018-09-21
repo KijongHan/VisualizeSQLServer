@@ -8,11 +8,14 @@ namespace SQLServer.Data.Metadata.Definitions
 	[SQLServerMetadata("SQLServer.Data.Metadata.Entities.SQL.IndexMetadata.sql")]
 	public class IndexMetadata
 	{
+		[Column("table_name")]
+		public string TableName { get; set; }
+
+		[Column("index_name")]
+		public string IndexName { get; set; }
+
 		[Column("object_id")]
 		public int TableObjectID { get; set; }
-
-		[Column("name")]
-		public string IndexName { get; set; }
 
 		[Column("index_id")]
 		public int IndexID { get; set; }
